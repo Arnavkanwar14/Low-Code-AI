@@ -1,0 +1,14 @@
+CustomerID,Name,Age,Salary,Department,JoinDate,Performance
+1,John Doe,30.0,50000.0,Engineering,2020-01-15,85
+2,Jane Smith,25.0,45000.0,Marketing,2020-02-20,92
+4,Alice Brown,28.0,48000.0,HR,2020-04-05,88
+5,Charlie Wilson,35.0,60000.0,Engineering,2020-05-12,95
+6,Diana Davis,27.0,47000.0,Marketing,2020-06-18,82
+7,John Doe,30.0,50000.0,Engineering,2020-01-15,85
+8,Eva Garcia,32.0,52000.0,Finance,2020-07-22,90
+10,Grace Lee,26.0,46000.0,Marketing,2020-09-14,91
+11,Henry Taylor,33.0,58000.0,Finance,2020-10-08,89
+12,Iris White,31.0,51000.0,HR,2020-11-25,84
+13,Jack Black,34.0,59000.0,Engineering,2020-12-03,93
+14,Kate Green,28.0,47500.0,Marketing,2021-01-10,86
+15,Liam Brown,36.0,61000.0,Finance,2021-02-15,94
