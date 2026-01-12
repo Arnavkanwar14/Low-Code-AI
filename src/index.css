@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-gray-900 via-slate-900 to-black min-h-screen;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    @apply bg-gray-800/40 backdrop-blur-md border border-cyan-500/30 shadow-2xl shadow-cyan-500/20;
+  }
+  
+  .kinesthetic-card {
+    @apply glass-effect rounded-2xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-cyan-500/40 hover:border-cyan-400/50;
+  }
+  
+  .drag-handle {
+    @apply cursor-grab active:cursor-grabbing;
+  }
+  
+  .drop-zone {
+    @apply border-2 border-dashed border-cyan-400/50 rounded-xl p-8 transition-all duration-300 bg-gray-800/20;
+  }
+  
+  .drop-zone.drag-over {
+    @apply border-cyan-300 bg-cyan-500/10 scale-105;
+  }
+  
+  .feature-card {
+    @apply kinesthetic-card cursor-pointer hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-blue-500/20;
+  }
+  
+  .dataset-card {
+    @apply kinesthetic-card hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-cyan-500/20;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .neon-glow {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.3), 0 0 40px rgba(34, 211, 238, 0.1);
+  }
+  
+  .neon-text {
+    text-shadow: 0 0 10px rgba(34, 211, 238, 0.8), 0 0 20px rgba(34, 211, 238, 0.4);
+  }
+} 
