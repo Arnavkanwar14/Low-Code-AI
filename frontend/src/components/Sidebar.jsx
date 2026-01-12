@@ -17,23 +17,27 @@ import {
   FileText,
   Image,
   BarChart3 as BarChart,
-  Database
+  Database,
+  TrendingUp
 } from 'lucide-react'
 
-const Sidebar = ({ onImportData }) => {
+const Sidebar = ({ onImportData, activeTab, setActiveTab, projects = [], selectedProjectId, onProjectCreate, onProjectSelect, onProjectDelete }) => {
   const [showImportModal, setShowImportModal] = useState(false)
   const [isDragOver, setIsDragOver] = useState(false)
   const [uploadStatus, setUploadStatus] = useState(null)
   const [uploadMessage, setUploadMessage] = useState('')
   const [selectedFiles, setSelectedFiles] = useState([])
+  const [newProjectName, setNewProjectName] = useState('')
   const fileInputRef = useRef(null)
+  const newProjectInputRef = useRef(null)
 
   const menuItems = [
-    { icon: Home, label: 'Dashboard', active: true },
-    { icon: FolderOpen, label: 'Projects' },
-    { icon: BarChart3, label: 'Analytics' },
-    { icon: Play, label: 'Training' },
-    { icon: Save, label: 'Models' },
+    { icon: Home, label: 'Dashboard', key: 'dashboard' },
+    { icon: FolderOpen, label: 'Projects', key: 'projects' },
+    { icon: BarChart3, label: 'Analytics', key: 'analytics' },
+    { icon: Play, label: 'Training', key: 'training' },
+    { icon: TrendingUp, label: 'Results', key: 'results' },
+    { icon: Save, label: 'Models', key: 'models' },
   ]
 
   const validateFile = (file) => {
@@ -199,11 +203,12 @@ const Sidebar = ({ onImportData }) => {
         {menuItems.map((item, index) => (
           <motion.button
             key={item.label}
+            onClick={() => setActiveTab && setActiveTab(item.key)}
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: index * 0.1 }}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${
-              item.active 
+              activeTab === item.key || (item.key === 'dashboard' && !activeTab)
                 ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg neon-glow' 
                 : 'hover:bg-cyan-500/20 text-gray-300'
             }`}
@@ -215,6 +220,91 @@ const Sidebar = ({ onImportData }) => {
           </motion.button>
         ))}
       </nav>
+
+      {/* Project selector */}
+      <div className="space-y-3 bg-gray-900/30 p-3 rounded-xl border border-cyan-500/20 overflow-hidden">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-cyan-300 uppercase tracking-wider neon-text">
+            Projects
+          </h3>
+          <motion.button
+            onClick={() => {
+              newProjectInputRef.current?.focus()
+            }}
+            className="p-1 rounded-lg bg-gray-800/60 hover:bg-gray-700/60 text-gray-200"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Plus className="w-4 h-4" />
+          </motion.button>
+        </div>
+        <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+          {projects.map((project) => (
+            <motion.div
+              key={project.id}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${
+                project.id === selectedProjectId
+                  ? 'bg-cyan-500/20 border border-cyan-500/40 text-cyan-100'
+                  : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50'
+              }`}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <button
+                onClick={() => onProjectSelect && onProjectSelect(project.id)}
+                className="flex items-center space-x-2 flex-1 text-left overflow-hidden"
+              >
+                <FolderOpen className="w-4 h-4 flex-shrink-0" />
+                <span className="truncate">{project.name}</span>
+              </button>
+              <div className="flex items-center space-x-2 pl-2">
+                <Clock className="w-4 h-4 text-gray-400" />
+                {onProjectDelete && (
+                  <button
+                    onClick={() => {
+                      if (window.confirm('Delete this project? This action cannot be undone.')) {
+                        onProjectDelete(project.id)
+                      }
+                    }}
+                    className="p-1 rounded hover:bg-red-500/20 text-red-300"
+                    title="Delete project"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        <div className="flex items-center space-x-2 w-full">
+          <input
+            ref={newProjectInputRef}
+            value={newProjectName}
+            onChange={(e) => setNewProjectName(e.target.value)}
+            placeholder="Name new project"
+            className="flex-1 min-w-0 px-2 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-sm text-gray-200 placeholder:text-gray-500 focus:ring-1 focus:ring-cyan-500"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && onProjectCreate) {
+                onProjectCreate(newProjectName)
+                setNewProjectName('')
+              }
+            }}
+          />
+          <motion.button
+            onClick={() => {
+              if (onProjectCreate) {
+                onProjectCreate(newProjectName)
+                setNewProjectName('')
+              }
+            }}
+            className="flex-shrink-0 px-3 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg text-sm whitespace-nowrap min-w-[72px]"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            Create
+          </motion.button>
+        </div>
+      </div>
 
       {/* Quick Actions */}
       <div className="space-y-4">
