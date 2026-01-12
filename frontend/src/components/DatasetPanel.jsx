@@ -7,7 +7,6 @@ import {
   FileText, 
   Image, 
   BarChart3, 
-  Plus,
   Trash2,
   Eye,
   X,
@@ -16,8 +15,6 @@ import {
 } from 'lucide-react'
 
 const DatasetPanel = ({ datasets, setDatasets, sampleDatasets = [] }) => {
-  const [isAddingDataset, setIsAddingDataset] = useState(false)
-  const [newDatasetName, setNewDatasetName] = useState('')
   const [isDragOver, setIsDragOver] = useState(false)
   const [uploadStatus, setUploadStatus] = useState(null)
   const [uploadMessage, setUploadMessage] = useState('')
@@ -38,21 +35,6 @@ const DatasetPanel = ({ datasets, setDatasets, sampleDatasets = [] }) => {
       case 'text': return 'bg-green-500/20 text-green-300 border border-green-500/30'
       case 'tabular': return 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
       default: return 'bg-gray-500/20 text-gray-300 border border-gray-500/30'
-    }
-  }
-
-  const addDataset = () => {
-    if (newDatasetName.trim()) {
-      const newDataset = {
-        id: `dataset-${Date.now()}`,
-        name: newDatasetName,
-        type: 'custom',
-        size: '0 KB',
-        samples: '0'
-      }
-      setDatasets([...datasets, newDataset])
-      setNewDatasetName('')
-      setIsAddingDataset(false)
     }
   }
 
@@ -211,57 +193,7 @@ const DatasetPanel = ({ datasets, setDatasets, sampleDatasets = [] }) => {
             <p className="text-sm text-gray-300">Drag datasets to workspace</p>
           </div>
         </div>
-        
-        <motion.button
-          onClick={() => setIsAddingDataset(true)}
-          className="p-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg hover:shadow-lg transition-shadow neon-glow"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Plus className="w-4 h-4" />
-        </motion.button>
       </div>
-
-      {/* Add Dataset Modal */}
-      {isAddingDataset && (
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="mb-4 p-4 bg-gray-800/80 rounded-lg border border-cyan-500/30 neon-glow"
-        >
-          <div className="space-y-3">
-            <input
-              type="text"
-              placeholder="Dataset name..."
-              value={newDatasetName}
-              onChange={(e) => setNewDatasetName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-gray-700 text-gray-200 placeholder-gray-400"
-              onKeyPress={(e) => e.key === 'Enter' && addDataset()}
-            />
-            <div className="flex space-x-2">
-              <motion.button
-                onClick={addDataset}
-                className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg hover:shadow-lg transition-colors"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Add
-              </motion.button>
-              <motion.button
-                onClick={() => {
-                  setIsAddingDataset(false)
-                  setNewDatasetName('')
-                }}
-                className="px-4 py-2 bg-gray-600 text-gray-300 rounded-lg hover:bg-gray-500 transition-colors"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Cancel
-              </motion.button>
-            </div>
-          </div>
-        </motion.div>
-      )}
 
       {/* Hidden File Input */}
       <input
